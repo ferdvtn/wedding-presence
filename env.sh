@@ -1,4 +1,4 @@
-export host="localhost"
+export host="backend"
 export port="5432"
 export user="postgres"
 export password="asdfasdf"

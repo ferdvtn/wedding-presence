@@ -21,7 +21,7 @@ services:
     ports:
       - 1323:1323
     environment:
-      - host=localhost
+      - host=postgres
       - port=5432
       - user=postgres
       - password=asdfasdf
