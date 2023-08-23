@@ -1,0 +1,41 @@
+{
+  "name": "wedding_presence",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "echo No tests found.",
+    "format": "prettier --write --ignore-path=.gitignore .",
+    "format:check": "prettier --check --ignore-path=.gitignore ."
+  },
+  "dependencies": {
+    "@types/node": "20.4.10",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
+    "axios": "^1.4.0",
+    "eslint": "8.47.0",
+    "eslint-config-next": "13.4.13",
+    "next": "13.4.13",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.4",
+    "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query-devtools": "^4.32.6",
+    "autoprefixer": "^10.4.14",
+    "eslint-config-prettier": "^8.10.0",
+    "lint-staged": "^13.2.3",
+    "postcss": "^8.4.27",
+    "prettier": "^2.8.8",
+    "react-icons": "^4.10.1",
+    "tailwindcss": "^3.3.3"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
+  }
+}

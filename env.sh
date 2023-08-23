@@ -1,0 +1,5 @@
+export host="localhost"
+export port="5432"
+export user="postgres"
+export password="asdfasdf"
+export dbname="wedding_presence"

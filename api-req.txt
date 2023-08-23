@@ -1,0 +1,85 @@
+// login
+endpoint: post /api/v1/login
+statuscode: 201 / 400
+payload: {
+    "username": "string",
+    "password": "securepassword",
+    "fullName": "string",
+}
+resp: {
+    "message": "string",
+}
+// login
+endpoint: post /api/v1/login
+statuscode: 200 / 401
+payload: {
+    "username": "string",
+    "password": "securepassword",
+}
+resp: {
+    "token": "token..."
+}
+// create guest
+endpoint: post /api/v1/guests
+statuscode: 201 / 400
+payload: {
+    "name": "string",
+    "moneyGift": 0,
+    "addsGift": "string",
+    "address": "string",
+    "phoneNumber": "string",
+}
+resp: {
+    "id": 0,
+    "name": "string",
+    "moneyGift": 0,
+    "addsGift": "string",
+    "address": "string",
+    "phoneNumber": "string",
+}
+// get guests
+endpoint: get /api/v1/guests
+statuscode: 200
+resp: [
+    {
+        "id": 0,
+        "name": "string",
+        "moneyGift": 0,
+        "addsGift": "string",
+    }
+]
+// get guest by id
+endpoint: get /api/v1/guests?id=
+statuscode: 200
+resp: {
+    "id": 0,
+    "name": "string",
+    "moneyGift": 0,
+    "addsGift": "string",
+    "address": "string",
+    "phoneNumber": "string",
+}
+// update guest by id
+endpoint: put /api/v1/guests?id=
+statuscode: 200 / 400 / 404
+payload: {
+    "name": "string",
+    "moneyGift": 0,
+    "addsGift": "string",
+    "address": "string",
+    "phoneNumber": "string",
+}
+resp: {
+    "id": 0,
+    "name": "string",
+    "moneyGift": 0,
+    "addsGift": "string",
+    "address": "string",
+    "phoneNumber": "string",
+}
+// delete guest by id
+endpoint: delete /api/v1/guests?id=
+statuscode: 204 / 404
+resp: {
+    "message": "string"
+}

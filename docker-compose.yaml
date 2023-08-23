@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: wedding_presence_db
+    platform: linux/amd64
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=asdfasdf
+      - POSTGRES_DB=wedding_presence
+    ports:
+      - 5432:5432
+    networks:
+      - wedding_presence_net
+  backend:
+    build: ./
+    container_name: wedding_presence_be
+    platform: linux/amd64
+    restart: always
+    ports:
+      - 1323:1323
+    environment:
+      - host=localhost
+      - port=5432
+      - user=postgres
+      - password=asdfasdf
+      - dbname=wedding_presence
+    depends_on:
+      - postgres
+    networks:
+      - wedding_presence_net
+
+  frontend:
+    build: ./internal/web
+    container_name: wedding_presence_fe
+    platform: linux/amd64
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    networks:
+      - wedding_presence_net
+
+networks:
+  wedding_presence_net:
