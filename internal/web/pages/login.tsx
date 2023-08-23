@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const loginMutation = useMutation({
     mutationFn: (data: FormData) => {
-      return axios.post("https://backend:1323/api/v1/users/login", {
+      return axios.post("https://127.0.0.1:1323/api/v1/users/login", {
         username: data.username,
         password: data.password,
       });
