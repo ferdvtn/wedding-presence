@@ -27,7 +27,7 @@ const IndexPage: NextPage = () => {
     queryKey: [],
     queryFn: async () => {
       const res = await axios.get(
-        `http://172.31.26.210:1323/api/v1/guests${
+        `http://54.169.200.76:1323/api/v1/guests${
           q.length > 0 ? "/name/" + q : ""
         }`,
         {

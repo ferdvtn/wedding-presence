@@ -19,7 +19,7 @@ const Register: NextPage = () => {
 
   const registerMutation = useMutation({
     mutationFn: (data: FormData) => {
-      return axios.post("http://172.31.26.210:1323/api/v1/users/register", {
+      return axios.post("http://54.169.200.76:1323/api/v1/users/register", {
         username: data.username,
         password: data.password,
       });
