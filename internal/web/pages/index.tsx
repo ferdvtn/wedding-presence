@@ -27,7 +27,7 @@ const IndexPage: NextPage = () => {
     queryKey: [],
     queryFn: async () => {
       const res = await axios.get(
-        `http://54.169.200.76:1323/api/v1/guests${
+        `http://127.0.0.1:1323/api/v1/guests${
           q.length > 0 ? "/name/" + q : ""
         }`,
         {
@@ -52,10 +52,6 @@ const IndexPage: NextPage = () => {
       router.push("/login");
       return;
     }
-  }
-
-  if (!data) {
-    return;
   }
 
   return (
@@ -89,7 +85,7 @@ const IndexPage: NextPage = () => {
             </form> */}
           </header>
           <article className="text-gray-700">
-            {isError ? (
+            {isError || !data ? (
               <small>Data tidak ditemukan</small>
             ) : (
               <ul className="space-y-2">
@@ -113,7 +109,10 @@ const IndexPage: NextPage = () => {
             )}
           </article>
         </div>
-        <BottomForm refetchFn={refetch} totalPerson={data.length} />
+        <BottomForm
+          refetchFn={refetch}
+          totalPerson={data?.length ? data.length : 0}
+        />
       </main>
     </>
   );

@@ -17,7 +17,7 @@ const GuestById: NextPage = () => {
     queryKey: [`guest_${router.query.id}`],
     queryFn: async () => {
       const res = await axios.get(
-        `http://54.169.200.76:1323/api/v1/guests/${router.query.id}`,
+        `http://127.0.0.1:1323/api/v1/guests/${router.query.id}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("_token")}`,

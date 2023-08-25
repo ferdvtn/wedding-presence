@@ -17,14 +17,12 @@ const LoginPage = () => {
 
   const loginMutation = useMutation({
     mutationFn: (data: FormData) => {
-      return axios.post("http://54.169.200.76:1323/api/v1/users/login", {
+      return axios.post(`http://127.0.0.1:1323/api/v1/users/login`, {
         username: data.username,
         password: data.password,
       });
     },
     onSuccess: (data) => {
-      console.log("data.data.token", data.data.token);
-
       if (data.status == 200) {
         sessionStorage.setItem("_token", data.data.token);
         router.push("/");
