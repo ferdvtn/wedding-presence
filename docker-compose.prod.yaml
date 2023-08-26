@@ -35,7 +35,7 @@ services:
     ports:
       - 3001:3000
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:1323
+      - NEXT_PUBLIC_API_URL=http://localhost:1324
     depends_on:
       - api
 
