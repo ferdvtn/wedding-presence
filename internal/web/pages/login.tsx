@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,23 +10,24 @@ interface FormData {
   password: string;
 }
 
-const LoginPage = () => {
+export default function LoginPage() {
   const router = useRouter();
   const { register, handleSubmit, formState } = useForm<FormData>();
   const [isRedirect, setIsRedirect] = useState<boolean | null>(null);
 
-  const loginMutation = useMutation({
-    mutationFn: (data: FormData) => {
-      return axios.post(`http://backend:1323/api/v1/users/login`, {
-        username: data.username,
-        password: data.password,
-      });
+  const loginMutation = useMutation<AxiosResponse, AxiosError, FormData>({
+    mutationFn: async (data) => {
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/login`,
+        {
+          username: data.username,
+          password: data.password,
+        }
+      );
     },
     onSuccess: (data) => {
-      if (data.status == 200) {
-        sessionStorage.setItem("_token", data.data.token);
-        router.push("/");
-      }
+      sessionStorage.setItem("_token", data.data.token);
+      router.push("/");
     },
   });
 
@@ -48,15 +49,18 @@ const LoginPage = () => {
     return;
   }
 
-  const onSubmit = (data: FormData) => {
-    loginMutation.mutate(data);
-  };
-
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
+    <div className="relative flex flex-col justify-center items-center h-screen">
+      {loginMutation.isError && (
+        <small className="absolute text-center rounded p-1 bg-gray-100 text-red-300 bottom-1 inset-x-1">
+          {loginMutation.error.message}
+        </small>
+      )}
       <form
         className="bg-white shadow rounded px-8 py-6"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => {
+          loginMutation.mutate(data);
+        })}
       >
         <h2 className="text-3xl font-bold text-gray-700 mb-3">Login</h2>
         <div className="mb-4">
@@ -108,6 +112,4 @@ const LoginPage = () => {
       </form>
     </div>
   );
-};
-
-export default LoginPage;
+}

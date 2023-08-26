@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN env GOOS=linux GOARCH=amd64 go build -o wedding_presence ./main.go
+RUN go build -o wedding_presence ./main.go
 
 EXPOSE 1323
 

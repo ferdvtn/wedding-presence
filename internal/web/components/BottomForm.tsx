@@ -22,7 +22,7 @@ const BottomForm = (props: BottomFormProps) => {
   const mutation = useMutation({
     mutationFn: (data: FormData) => {
       return axios.post(
-        `http://backend:1323/api/v1/guests`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guests`,
         {
           name: data.name,
           money_gift: Number(data.money_gift),

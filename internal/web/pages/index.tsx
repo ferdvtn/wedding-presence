@@ -16,18 +16,16 @@ interface Guest {
   adds_gift: string;
 }
 
-const IndexPage: NextPage = () => {
+export default function IndexPage() {
   const router = useRouter();
-  const [q, setQ] = useState("");
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [guestsToShow, setGuestsToShow] = useState<Guest[]>([]);
 
-  const { isLoading, isError, data, error, refetch } = useQuery<
-    Guest[],
-    AxiosError
-  >({
-    queryKey: [],
+  const { isLoading, isError, error, refetch } = useQuery<Guest[], AxiosError>({
+    queryKey: ["guests"],
     queryFn: async () => {
       const res = await axios.get(
-        `http://backend:1323/api/v1/guests${q.length > 0 ? "/name/" + q : ""}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guests`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("_token")}`,
@@ -35,14 +33,13 @@ const IndexPage: NextPage = () => {
         }
       );
 
+      setGuests(res.data);
+      setGuestsToShow(res.data);
+
       return res.data;
     },
     retry: 0,
   });
-
-  if (isLoading) {
-    return;
-  }
 
   if (isError) {
     if (error.response?.status == 401) {
@@ -70,35 +67,41 @@ const IndexPage: NextPage = () => {
                 type="text"
                 className="py-1 pl-7 pr-2 w-full text-sm text-gray-500 bg-gray-100 rounded"
                 placeholder="Search"
-                value={q}
                 onChange={(e) => {
-                  setQ(e.target.value);
-                }}
-                onBlur={(e) => {
-                  refetch();
+                  if (e.target.value.length > 0) {
+                    setGuestsToShow(
+                      guests.filter((g) => {
+                        return g.name
+                          .toLowerCase()
+                          .includes(e.target.value.toLowerCase());
+                      })
+                    );
+                  } else {
+                    setGuestsToShow(guests);
+                  }
                 }}
               />
             </label>
-            {/* <form>
-            </form> */}
           </header>
+
           <article className="text-gray-700">
-            {isError || !data ? (
+            {isLoading && <small>Data tidak ditemukan</small>}
+            {isError || guestsToShow.length == 0 ? (
               <small>Data tidak ditemukan</small>
             ) : (
               <ul className="space-y-2">
-                {data.map((item) => (
-                  <li key={item.id}>
+                {guestsToShow.map((guest) => (
+                  <li key={guest.id}>
                     <Link
-                      href={`/${item.id}`}
+                      href={`/${guest.id}`}
                       className="py-1 px-2 flex flex-col rounded bg-gray-200 whitespace-nowrap"
                     >
                       <p className="text-sm font-bold overflow-hidden text-ellipsis">
-                        {item.name}
+                        {guest.name}
                       </p>
                       <small className="text-gray-500 overflow-hidden text-ellipsis">
-                        IDR {item.money_gift}
-                        {item.adds_gift && ` | ${item.adds_gift}`}
+                        IDR {guest.money_gift}
+                        {guest.adds_gift && ` | ${guest.adds_gift}`}
                       </small>
                     </Link>
                   </li>
@@ -109,11 +112,9 @@ const IndexPage: NextPage = () => {
         </div>
         <BottomForm
           refetchFn={refetch}
-          totalPerson={data?.length ? data.length : 0}
+          totalPerson={guests.length ? guests.length : 0}
         />
       </main>
     </>
   );
-};
-
-export default IndexPage;
+}

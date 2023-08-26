@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -12,19 +12,22 @@ interface FormData {
   confirmPassword: string;
 }
 
-const Register: NextPage = () => {
+export default function RegisterPage() {
   const router = useRouter();
   const { register, handleSubmit, watch, formState } = useForm<FormData>();
   const [isRedirect, setIsRedirect] = useState<boolean | null>(null);
 
-  const registerMutation = useMutation({
-    mutationFn: (data: FormData) => {
-      return axios.post(`http://backend:1323/api/v1/users/register`, {
-        username: data.username,
-        password: data.password,
-      });
+  const registerMutation = useMutation<AxiosResponse, AxiosError, FormData>({
+    mutationFn: (data) => {
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/register`,
+        {
+          username: data.username,
+          password: data.password,
+        }
+      );
     },
-    onSuccess: (data, variables, context) => {
+    onSuccess: () => {
       router.push("login");
     },
   });
@@ -47,15 +50,13 @@ const Register: NextPage = () => {
     return;
   }
 
-  const onSubmit = (data: FormData) => {
-    registerMutation.mutate(data);
-  };
-
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <form
         className="bg-white shadow rounded px-8 py-6"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => {
+          registerMutation.mutate(data);
+        })}
       >
         <h2 className="text-3xl font-bold text-gray-700 mb-3">Register</h2>
         <div className="mb-4">
@@ -128,6 +129,4 @@ const Register: NextPage = () => {
       </form>
     </div>
   );
-};
-
-export default Register;
+}

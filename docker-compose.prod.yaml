@@ -4,8 +4,7 @@ services:
   db:
     image: postgres:15-alpine
     container_name: wedding_presence_db
-    ports:
-      - 5432:5432
+    platform: linux/amd64
     restart: always
     environment:
       - POSTGRES_PASSWORD=asdfasdf
@@ -14,6 +13,7 @@ services:
   api:
     build: ./
     container_name: wedding_presence_api
+    platform: linux/amd64
     restart: always
     ports:
       - 1323:1323
@@ -30,6 +30,7 @@ services:
     build:
       context: ./internal/web
     container_name: wedding_presence_web
+    platform: linux/amd64
     restart: always
     ports:
       - 3000:3000
