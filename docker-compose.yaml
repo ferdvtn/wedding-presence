@@ -16,7 +16,7 @@ services:
     container_name: wedding_presence_api
     restart: always
     ports:
-      - 1323:1323
+      - 1324:1323
     environment:
       - DB_HOST=db
       - DB_PORT=5432
@@ -32,7 +32,7 @@ services:
     container_name: wedding_presence_web
     restart: always
     ports:
-      - 3000:3000
+      - 3001:3000
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:1323
     depends_on:
