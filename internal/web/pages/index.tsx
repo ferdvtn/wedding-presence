@@ -33,10 +33,15 @@ export default function IndexPage() {
         }
       );
 
-      setGuests(res.data);
-      setGuestsToShow(res.data);
+      let data = [];
+      if (res.data) {
+        data = res.data;
+      }
 
-      return res.data;
+      setGuests(data);
+      setGuestsToShow(data);
+
+      return data;
     },
     retry: 0,
   });
@@ -85,8 +90,8 @@ export default function IndexPage() {
           </header>
 
           <article className="text-gray-700">
-            {isLoading && <small>Data tidak ditemukan</small>}
-            {isError || guestsToShow.length == 0 ? (
+            {isLoading && <small>Mengambil data...</small>}
+            {!isLoading && (isError || guestsToShow.length == 0) ? (
               <small>Data tidak ditemukan</small>
             ) : (
               <ul className="space-y-2">

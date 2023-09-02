@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:15-alpine
     container_name: wedding_presence_db
+    ports:
+      - 5432:5432
     platform: linux/amd64
     restart: always
     environment:
@@ -11,7 +13,8 @@ services:
       - POSTGRES_DB=wedding_presence
 
   api:
-    build: ./
+    build:
+      context: ./
     container_name: wedding_presence_api
     platform: linux/amd64
     restart: always
@@ -34,8 +37,6 @@ services:
     restart: always
     ports:
       - 3001:3000
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:1324
     depends_on:
       - api
 

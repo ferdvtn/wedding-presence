@@ -52,7 +52,7 @@ export default function LoginPage() {
   return (
     <div className="relative flex flex-col justify-center items-center h-screen">
       {loginMutation.isError && (
-        <small className="absolute text-center rounded p-1 bg-gray-100 text-red-300 bottom-1 inset-x-1">
+        <small className="absolute text-center rounded p-1 bg-red-100 text-red-300 bottom-1 inset-x-1">
           {loginMutation.error.message}
         </small>
       )}
