@@ -22,7 +22,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "ucwords": "^1.0.5"
   },
   "devDependencies": {
     "@tanstack/react-query": "^4.32.6",

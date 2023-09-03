@@ -17,6 +17,7 @@ interface Guest {
 
 export default function IndexPage() {
   const router = useRouter();
+  const ucwords = require("ucwords");
   const [guests, setGuests] = useState<Guest[]>([]);
   const [guestsToShow, setGuestsToShow] = useState<Guest[]>([]);
   const { handleSubmit } = useForm();
@@ -113,17 +114,17 @@ export default function IndexPage() {
                 {guestsToShow.map((guest) => (
                   <li
                     key={guest.id}
-                    className="py-1 px-2 flex flex-row justify-between rounded bg-gray-200"
+                    className="py-1 px-2 flex flex-row space-x-3 justify-between rounded bg-gray-200"
                   >
                     <Link
                       href={`/${guest.id}`}
-                      className="flex-grow whitespace-nowrap"
+                      className="flex-grow flex flex-col overflow-auto"
                     >
-                      <p className="text-sm font-bold overflow-hidden text-ellipsis">
-                        {guest.name}
+                      <p className="text-sm font-bold truncate">
+                        {ucwords(guest.name)}
                       </p>
-                      <small className="text-gray-500 overflow-hidden text-ellipsis">
-                        IDR {guest.money_gift}
+                      <small className="text-gray-500 truncate">
+                        IDR {guest.money_gift.toLocaleString()}
                         {guest.adds_gift && ` | ${guest.adds_gift}`}
                       </small>
                     </Link>
