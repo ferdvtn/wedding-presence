@@ -1,13 +1,12 @@
 import BottomForm from "@/components/BottomForm";
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
-
-import { GetServerSideProps, NextPage } from "next";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { useForm } from "react-hook-form";
+import { AiOutlineSearch, AiOutlineUserDelete } from "react-icons/ai";
 
 interface Guest {
   id: number;
@@ -20,6 +19,22 @@ export default function IndexPage() {
   const router = useRouter();
   const [guests, setGuests] = useState<Guest[]>([]);
   const [guestsToShow, setGuestsToShow] = useState<Guest[]>([]);
+  const { handleSubmit } = useForm();
+  const deleteMutation = useMutation<AxiosResponse, AxiosError, number>({
+    mutationFn: async (guestId) => {
+      return axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guests/${guestId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("_token")}`,
+          },
+        }
+      );
+    },
+    onSuccess() {
+      refetch();
+    },
+  });
 
   const { isLoading, isError, error, refetch } = useQuery<Guest[], AxiosError>({
     queryKey: ["guests"],
@@ -96,10 +111,13 @@ export default function IndexPage() {
             ) : (
               <ul className="space-y-2">
                 {guestsToShow.map((guest) => (
-                  <li key={guest.id}>
+                  <li
+                    key={guest.id}
+                    className="py-1 px-2 flex flex-row justify-between rounded bg-gray-200"
+                  >
                     <Link
                       href={`/${guest.id}`}
-                      className="py-1 px-2 flex flex-col rounded bg-gray-200 whitespace-nowrap"
+                      className="flex-grow whitespace-nowrap"
                     >
                       <p className="text-sm font-bold overflow-hidden text-ellipsis">
                         {guest.name}
@@ -109,6 +127,17 @@ export default function IndexPage() {
                         {guest.adds_gift && ` | ${guest.adds_gift}`}
                       </small>
                     </Link>
+                    <form
+                      onSubmit={handleSubmit(() => {
+                        deleteMutation.mutate(guest.id);
+                      })}
+                    >
+                      <div className="flex h-full justify-center items-center">
+                        <button className="bg-red-200 rounded p-3">
+                          <AiOutlineUserDelete />
+                        </button>
+                      </div>
+                    </form>
                   </li>
                 ))}
               </ul>
